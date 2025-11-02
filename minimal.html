@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Minimal Broforce Test</title>
+    <style>
+        body { margin: 0; padding: 0; background: #000; }
+    </style>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
+    <script>
+        console.log('Starting minimal test...');
+
+        // Simple test scene
+        class TestScene extends Phaser.Scene {
+            constructor() {
+                super({ key: 'TestScene' });
+            }
+
+            create() {
+                console.log('TestScene created!');
+
+                // Sky background
+                this.add.rectangle(640, 360, 1280, 720, 0x87CEEB);
+
+                // Ground
+                const ground = this.add.rectangle(640, 650, 1280, 100, 0x8B4513);
+                this.physics.add.existing(ground, true);
+
+                // Player
+                this.player = this.add.rectangle(100, 500, 24, 32, 0x0000FF);
+                this.physics.add.existing(this.player);
+                this.player.body.setCollideWorldBounds(true);
+
+                // Collision
+                this.physics.add.collider(this.player, ground);
+
+                // Text
+                this.add.text(10, 10, 'Minimal Test\nUse Arrow Keys to Move\nPress Space to Jump', {
+                    fontSize: '16px',
+                    color: '#fff'
+                });
+
+                // Input
+                this.cursors = this.input.keyboard.createCursorKeys();
+                this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+                console.log('TestScene setup complete!');
+            }
+
+            update() {
+                if (this.cursors.left.isDown) {
+                    this.player.body.setVelocityX(-200);
+                } else if (this.cursors.right.isDown) {
+                    this.player.body.setVelocityX(200);
+                } else {
+                    this.player.body.setVelocityX(0);
+                }
+
+                if (Phaser.Input.Keyboard.JustDown(this.spaceKey) && this.player.body.touching.down) {
+                    this.player.body.setVelocityY(-400);
+                }
+            }
+        }
+
+        // Game config
+        const config = {
+            type: Phaser.AUTO,
+            width: 1280,
+            height: 720,
+            backgroundColor: '#000000',
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: { y: 800 },
+                    debug: false
+                }
+            },
+            scene: [TestScene]
+        };
+
+        console.log('Creating game...');
+        const game = new Phaser.Game(config);
+        console.log('Game created!');
+    </script>
+</body>
+</html>

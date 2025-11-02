@@ -12,6 +12,7 @@ class MainScene extends Phaser.Scene {
      * Preload assets
      */
     preload() {
+        console.log('[MainScene] preload() called');
         // Placeholder assets are created programmatically in create()
         // In production, you would load sprite sheets here
     }
@@ -20,7 +21,9 @@ class MainScene extends Phaser.Scene {
      * Create game world
      */
     create() {
-        // Define level data (tile array)
+        console.log('[MainScene] create() started');
+        try {
+            // Define level data (tile array)
         // 0 = air, 1 = dirt, 2 = stone, 3 = platform, 4 = destructible, 5 = ladder
         this.levelData = [
             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -83,6 +86,12 @@ class MainScene extends Phaser.Scene {
         this.time.delayedCall(500, () => {
             this.uiManager.showMessage('DESTROY EVERYTHING!', 3000);
         });
+
+            console.log('[MainScene] create() completed successfully');
+        } catch (error) {
+            console.error('[MainScene] Error in create():', error);
+            throw error;
+        }
     }
 
     /**

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Broforce Debug</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Courier New', monospace;
+        }
+        #game-container {
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+        #debug {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #0f0;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            max-width: 400px;
+            z-index: 10000;
+        }
+    </style>
+</head>
+<body>
+    <div id="debug">Loading...</div>
+    <div id="game-container"></div>
+
+    <script>
+        const debugLog = [];
+        function log(msg) {
+            console.log(msg);
+            debugLog.push(msg);
+            document.getElementById('debug').innerHTML = debugLog.join('<br>');
+        }
+
+        log('1. Starting debug...');
+
+        window.onerror = function(msg, url, line, col, error) {
+            log('ERROR: ' + msg + ' at line ' + line);
+            return false;
+        };
+    </script>
+
+    <!-- Phaser 3 from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
+    <script>
+        log('2. Phaser loaded: ' + (typeof Phaser !== 'undefined'));
+        if (typeof Phaser !== 'undefined') {
+            log('   Phaser version: ' + Phaser.VERSION);
+        }
+    </script>
+
+    <!-- Game source files -->
+    <script src="src/explosion.js"></script>
+    <script>log('3. explosion.js loaded');</script>
+
+    <script src="src/weapon.js"></script>
+    <script>log('4. weapon.js loaded');</script>
+
+    <script src="src/terrain.js"></script>
+    <script>log('5. terrain.js loaded');</script>
+
+    <script src="src/player.js"></script>
+    <script>log('6. player.js loaded');</script>
+
+    <script src="src/enemy.js"></script>
+    <script>log('7. enemy.js loaded');</script>
+
+    <script src="src/ui.js"></script>
+    <script>log('8. ui.js loaded');</script>
+
+    <script src="src/scene_main.js"></script>
+    <script>log('9. scene_main.js loaded - MainScene exists: ' + (typeof MainScene !== 'undefined'));</script>
+
+    <script src="src/game.js"></script>
+    <script>log('10. game.js loaded - Game initialized: ' + (typeof game !== 'undefined'));</script>
+</body>
+</html>
